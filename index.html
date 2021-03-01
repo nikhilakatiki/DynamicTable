@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="script.js"></script>
+    <script>
+        function Hello() {
+            try {
+                const url = "http://praveer-001-site3.ctempurl.com/SpinoService.svc/getcountrylist";
+                var http_request = new XMLHttpRequest();
+                http_request.onreadystatechange = function () {
+                    console.log(http_request.readyState)
+                    if (http_request.readyState === 4 && http_request.status === 200) {
+                        // Javascript function JSON.parse to parse JSON data
+                        let myData = JSON.parse(http_request.responseText);
+                        myData = myData["GetCountryListResult"];
+                        console.log(myData);
+                        //Table Creation
+                        // get the reference for the body
+                        var body = document.getElementsByTagName("body")[0];
+
+                        // creates a <table> element and a <tbody> element
+                        var tbl = document.createElement("table");
+                        var tblBody = document.createElement("tbody");
+                        // creating all cells
+                        for (let item of myData) {
+                            // creates a table row
+                            var row = document.createElement("tr");
+
+                            for (let obj in item) {
+                                // // Create a <td> element and a text node, make the text
+                                // // node the contents of the <td>, and put the <td> at
+                                // // the end of the table row
+                                var cell = document.createElement("td");
+                                var cellText = document.createTextNode(item[obj]);
+                                cell.appendChild(cellText);
+                                row.appendChild(cell);
+                            }
+
+                            // add the row to the end of the table body
+                            tblBody.appendChild(row);
+                        }
+
+                        // put the <tbody> in the <table>
+                        tbl.appendChild(tblBody);
+                        // appends <table> into <body>
+                        body.appendChild(tbl);
+                        // sets the border attribute of tbl to 2;
+                        tbl.setAttribute("border", "2");
+                        myData.map(i => console.log(i.country_name))
+                    }
+                }
+                http_request.open("GET", url, true);
+                http_request.send();
+            }
+            catch (exception) {
+                console.log(exception);
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <div>
+        <input type="button" value="Click Me Button" onclick="Calculate()" /> <br> <br>
+        <input type="button" value="Hello Button" onclick="Hello()" /> <br> <br>
+        <div id="details"></div>
+    </div>
+</body>
+
+</html>
